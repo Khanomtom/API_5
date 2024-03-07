@@ -9,7 +9,7 @@ router.post("/", (req, res) => {
     const data = req.body;
     console.log(data);
     
-    let sql = "INSERT INTO movie (Title, Image, Plot, Rating, Type) VALUES (?, ?, ?, ?, ?)";
+    let sql = "INSERT INTO movie (Title, Image, Plot, Rating, type) VALUES (?, ?, ?, ?, ?)";
     sql = mysql.format(sql, [
         data.Title,
         data.Image,
@@ -57,14 +57,14 @@ router.get("/search/:Title", (req, res) => {
     WHERE PID IN ( 
         SELECT stars.PID 
         FROM stars INNER JOIN movie ON stars.MID = movie.MID 
-        WHERE movie.Title LIKE "%bat%" 
+        WHERE movie.Title LIKE ?
         
         UNION 
         
         SELECT creaters.PID 
         FROM creaters 
         INNER JOIN movie ON creaters.MID = movie.MID 
-        WHERE movie.Title LIKE "%bat%" 
+        WHERE movie.Title LIKE ? 
     )`;
     sql = mysql.format(sql, [`%${req.params.Title}%`,`%${req.params.Title}%`]);
     conn.query(sql, (err, result) => {
